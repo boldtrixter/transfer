@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author user
  */
 @Controller
-@RequestMapping(value = "/web")
+@RequestMapping(value = "/webresources/rest")
 public class BusinessController {
 
     @Autowired
@@ -32,13 +32,13 @@ public class BusinessController {
     public BusinessController() {
     }
 
-    @RequestMapping(value = "/goods/", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/goods", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<Transfertable> getAllMakers() {
         return business.getAllMakers();
     }
     
-    @RequestMapping(value = "/post/", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/setSale", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ServerResponse setUnit(@RequestBody Data d) throws ServerException {
         

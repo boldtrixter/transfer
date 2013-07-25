@@ -4,8 +4,9 @@
  */
 package com.pb.business.layer.dao;
 
-import Entity.Person;
 import Entity.Transfertable;
+import com.pb.business.json.entity.Data;
+import com.pb.business.json.entity.ServerResponse;
 import java.util.List;
 
 /**
@@ -14,4 +15,5 @@ import java.util.List;
  */
 public interface DAOLayer {
     List<Transfertable> getAllMakers();
+    ServerResponse addTransfer(Data data);
 }

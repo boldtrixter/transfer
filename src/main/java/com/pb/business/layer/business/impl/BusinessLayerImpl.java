@@ -7,18 +7,15 @@ package com.pb.business.layer.business.impl;
 import Entity.Transfertable;
 import ResponsePattern.Response;
 import com.pb.business.exception.ServerException;
-import com.pb.business.json.entity.Answer;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.layer.business.BusinessLayer;
 import com.pb.business.layer.dao.DAOLayer;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.misc.Regexp;
 
 /**
  *
@@ -28,7 +25,7 @@ import sun.misc.Regexp;
 public class BusinessLayerImpl implements BusinessLayer {
 
     @Autowired
-    DAOLayer dao;
+     DAOLayer dao;
 
     @Override
     public List<Transfertable> getAllMakers() {
@@ -53,12 +50,9 @@ public class BusinessLayerImpl implements BusinessLayer {
             throw new ServerException(Response.IncorrectProductName.MESSAGE, Response.IncorrectProductName.CODE);
         }
 
-        //return dao.
+        return dao.
         
-        ServerResponse sr = new ServerResponse();
-        sr.setRef("ok");
-        sr.setRef("0");
-        return sr;
+
     }
 
     private boolean checkPhone(String phone) {

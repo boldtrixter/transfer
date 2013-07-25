@@ -4,9 +4,9 @@
  */
 package com.pb.business.layer.dao.impl;
 
-import Entity.Person;
 import Entity.Transfertable;
-import Entity.Unit;
+import com.pb.business.json.entity.Data;
+import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.layer.dao.DAOLayer;
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -29,10 +28,18 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     public List<Transfertable> getAllMakers() {
         List<Transfertable> list = new LinkedList<Transfertable>();
         list = getJdbcTemplate().query(GET_ALL_TRANSFER, new TransferMapper());
-       // String s = list.get(0).getFio() + " " + list.get(0).getPhonenumber();
+        // String s = list.get(0).getFio() + " " + list.get(0).getPhonenumber();
         return list;
     }
-    
+
+    @Override
+    public ServerResponse addTransfer(Data data) {
+        ServerResponse sr = new ServerResponse();
+        sr.setNote("ok");
+        sr.setRef("0");
+        return sr;
+    }
+
     private static final class TransferMapper implements RowMapper<Transfertable> {
 
         @Override
@@ -59,7 +66,7 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
 //            p.setIdekb(rs.getString("IDEKB"));
 //            p.setInn(new BigInteger(rs.getString("INN")));
 //            p.setPass(rs.getString("PASS"));
-            
+
 //            String s = rs.getString("TABNUM");
 //            System.out.println(s);
 //            if(s.equals("null")){
@@ -67,10 +74,10 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
 //            } else{
 //                p.setTabnum(new BigInteger(s));
 //            }
-            
+
 //            p.setType(rs.getShort("TYPE"));
             return t;
-            
+
         }
     }
 }
