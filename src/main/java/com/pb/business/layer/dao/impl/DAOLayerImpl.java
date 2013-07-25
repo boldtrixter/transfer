@@ -7,7 +7,7 @@ package com.pb.business.layer.dao.impl;
 import Entity.Person;
 import Entity.Transfertable;
 import Entity.Unit;
-import com.pb.business.layer.dao.PersonDAO;
+import com.pb.business.layer.dao.DAOLayer;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author user
  */
-public class PersonDAOImpl extends JdbcDaoSupport implements PersonDAO {
+public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
 
     private final String GET_ALL_TRANSFER = "SELECT * FROM TRANSFERTABLE";
 

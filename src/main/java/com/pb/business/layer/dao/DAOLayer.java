@@ -12,6 +12,6 @@ import java.util.List;
  *
  * @author user
  */
-public interface PersonDAO {
+public interface DAOLayer {
     List<Transfertable> getAllMakers();
 }
