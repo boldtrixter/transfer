@@ -36,7 +36,7 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     public ServerResponse addTransfer(Data data) {
         ServerResponse sr = new ServerResponse();
         sr.setNote("ok");
-        sr.setRef("0");
+        sr.setRef("23");
         return sr;
     }
 
