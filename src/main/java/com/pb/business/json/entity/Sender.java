@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 public class Sender {
 

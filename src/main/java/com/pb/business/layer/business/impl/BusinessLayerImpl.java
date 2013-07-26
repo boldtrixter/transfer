@@ -9,6 +9,7 @@ import ResponsePattern.Response;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
+import com.pb.business.json.entity.User;
 import com.pb.business.layer.business.BusinessLayer;
 import com.pb.business.layer.dao.DAOLayer;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 @Service
 public class BusinessLayerImpl implements BusinessLayer {
@@ -57,14 +58,42 @@ public class BusinessLayerImpl implements BusinessLayer {
 
     @Override
     public ServerResponse deleteTransfer(String transferId) throws ServerException {
-        //if( (transferId < 0) )
-        
-
+        try{
+            Integer.parseInt(transferId);
+        }catch(Exception e){
+            throw new ServerException(Response.IncorrectID.MESSAGE, Response.IncorrectID.CODE);
+        }
         
         ServerResponse sr = new ServerResponse();
-        sr.setRef(1 + transferId);
-        sr.setNote("We made it!");
+        sr.setRef(Response.Done.CODE);
+        sr.setNote(Response.Done.MESSAGE);
+
+        return sr;
+    }
+
+    @Override
+    public ServerResponse getSmsPassword(String phone) throws ServerException {
+        if (!checkPhone(phone)) {
+            throw new ServerException(Response.IncorrectPhone.MESSAGE, Response.IncorrectPhone.CODE);
+        } else {
+            //HORRIBLE STUB
+            ServerResponse sr = new ServerResponse();
+            sr.setRef(Response.Done.CODE);
+            sr.setNote(Response.Done.MESSAGE);
+            return sr;
+            //Дергаем сервис! наверно...
+        }
+    }
+
+    @Override
+    public ServerResponse verifyUser(User user) throws ServerException {
+        if ((user.getLogin().equals("")) || (user.getPassword().equals(""))) {
+            throw new ServerException(Response.IncorrectID.MESSAGE, Response.IncorrectID.CODE);
+        }
         
+        ServerResponse sr = new ServerResponse();
+        sr.setRef(Response.Done.CODE);
+        sr.setNote(Response.Done.MESSAGE);
         return sr;
     }
 

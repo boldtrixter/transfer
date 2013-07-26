@@ -6,7 +6,7 @@ package com.pb.business.exception;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 public class ServerException extends Exception{
     

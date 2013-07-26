@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 public interface DAOLayer {
     List<Transfertable> getAllMakers();

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 
 public class Productscanserialnumber implements Serializable {

@@ -18,7 +18,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
 

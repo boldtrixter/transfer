@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 
 public class Unit implements Serializable {

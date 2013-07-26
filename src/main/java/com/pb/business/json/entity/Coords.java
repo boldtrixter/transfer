@@ -6,7 +6,7 @@ package com.pb.business.json.entity;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 public class Coords {
     private String latitude;

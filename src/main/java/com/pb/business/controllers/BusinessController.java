@@ -8,6 +8,7 @@ import Entity.Transfertable;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
+import com.pb.business.json.entity.User;
 import com.pb.business.layer.business.BusinessLayer;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
+
 @Controller
 @RequestMapping(value = "/webresources/rest")
 public class BusinessController {
@@ -47,10 +49,22 @@ public class BusinessController {
         
     }
     
-    @RequestMapping(value = "/deleteTransfer/{transferID}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/deleteTransfer/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ServerResponse deleteTransfer(@PathVariable(value = "transferID") String transferId) throws ServerException{
+    public ServerResponse deleteTransfer(@PathVariable(value = "id") String transferId) throws ServerException{
         return business.deleteTransfer(transferId);
+    }
+    
+    @RequestMapping(value = "/getSmsPassword/{phone}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public ServerResponse getSmsPassword(@PathVariable(value = "phone") String phone) throws ServerException{
+        return business.getSmsPassword(phone);
+    }
+    
+    @RequestMapping(value = "/verifyUser", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public ServerResponse verifyUser(@RequestBody User user) throws ServerException{
+        return business.verifyUser(user);
     }
     
     @ExceptionHandler(ServerException.class)
