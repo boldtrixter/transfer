@@ -21,8 +21,15 @@ xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springf
             </bean>
         
         </mvc:message-converters>-->
+        <mvc:message-converters>
+                        <bean id="stringHttpMessageConverter" 
+                  class="org.springframework.http.converter.StringHttpMessageConverter">
+            </bean>
+        </mvc:message-converters>
+        
     </mvc:annotation-driven>
     
+    <!--Классы которые сканируються на анотации-->
     <context:annotation-config/>
    
     <context:component-scan base-package="com.pb.business.controllers" />
@@ -39,7 +46,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springf
         <property name="contextPath" value="com.pb.shop.model"/>
     </bean>-->
 
-
+    <!--Вьюха-->
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix">

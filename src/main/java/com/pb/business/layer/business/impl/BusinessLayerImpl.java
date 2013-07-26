@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class BusinessLayerImpl implements BusinessLayer {
 
     @Autowired
-     DAOLayer dao;
+    DAOLayer dao;
 
     @Override
     public List<Transfertable> getAllMakers() {
@@ -39,20 +39,33 @@ public class BusinessLayerImpl implements BusinessLayer {
         if (!checkPhone(data.getSender().getPhoneNumber())) {
             throw new ServerException(Response.IncorrectSenderPhone.MESSAGE, Response.IncorrectSenderPhone.CODE);
         }
-        
+
         //Проверка номера телефона получателя
         if (!checkPhone(data.getReceiver().getPhoneNumber())) {
             throw new ServerException(Response.IncorrectReceiverPhone.MESSAGE, Response.IncorrectReceiverPhone.CODE);
         }
-        
+
         //Имя товара
-        if (data.getName().equals("")){
+        if (data.getName().equals("")) {
             throw new ServerException(Response.IncorrectProductName.MESSAGE, Response.IncorrectProductName.CODE);
         }
 
         return dao.addTransfer(data);
+
+
+    }
+
+    @Override
+    public ServerResponse deleteTransfer(String transferId) throws ServerException {
+        //if( (transferId < 0) )
         
 
+        
+        ServerResponse sr = new ServerResponse();
+        sr.setRef(1 + transferId);
+        sr.setNote("We made it!");
+        
+        return sr;
     }
 
     private boolean checkPhone(String phone) {

@@ -8,7 +8,7 @@
             
     
 ">
-    <!--org.apache.commons.dbcp.BasicDataSource-->
+    <!--org.apache.commons.dbcp.BasicDataSource  Дата сорс-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
             <value>${jdbc.driverClassName}</value>
@@ -24,7 +24,7 @@
         </property>
     </bean>
     
-    <!---->
+    <!--Менеджер транзакций-->
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>

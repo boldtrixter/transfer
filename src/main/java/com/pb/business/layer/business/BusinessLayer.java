@@ -17,4 +17,5 @@ import java.util.List;
 public interface BusinessLayer {
     List<Transfertable> getAllMakers();
     public ServerResponse checkData(Data data) throws ServerException;
+    public ServerResponse deleteTransfer(String transferId) throws ServerException;
 }
