@@ -51,5 +51,10 @@ public final class Response {
         public static final String MESSAGE = "Недопустимый идентификатор";
         public static final String CODE = "-6";
     }
-    
+
+    public static final class AuthorizationError {
+
+        public static final String MESSAGE = "Ошибка авторизации";
+        public static final String CODE = "-7";
+    }
 }
