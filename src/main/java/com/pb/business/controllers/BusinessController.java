@@ -9,11 +9,9 @@ import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
-import com.pb.business.json.entity.User;
+import com.pb.business.json.entity.UserData;
 import com.pb.business.layer.business.BusinessLayer;
 import java.util.List;
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,7 +32,6 @@ public class BusinessController {
 
     @Autowired
     private BusinessLayer business;
-    private static final Logger logger = Logger.getLogger(BusinessController.class);
 
     public BusinessController() {
     }
@@ -62,13 +59,13 @@ public class BusinessController {
     
     @RequestMapping(value = "/getSmsPassword/{phone}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public AuthorizationResponse getSmsPassword(@PathVariable(value = "phone") String phone) throws ServerException{
+    public ServerResponse getSmsPassword(@PathVariable(value = "phone") String phone) throws ServerException{
         return business.getSmsPassword(phone);
     }
     
     @RequestMapping(value = "/verifyUser", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ServerResponse verifyUser(@RequestBody User user) throws ServerException{
+    public AuthorizationResponse verifyUser(@RequestBody UserData user) throws ServerException{
         return business.verifyUser(user);
     }
         
@@ -80,5 +77,6 @@ public class BusinessController {
         sr.setNote(ex.getMessage());
         return sr;
     }
+    //366824
 
 }

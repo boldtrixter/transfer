@@ -15,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -25,6 +27,7 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     private final String GET_ALL_TRANSFER = "SELECT * FROM TRANSFERTABLE";
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<Transfertable> getAllMakers() {
         List<Transfertable> list = new LinkedList<Transfertable>();
         list = getJdbcTemplate().query(GET_ALL_TRANSFER, new TransferMapper());
@@ -33,13 +36,16 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ServerResponse addTransfer(Data data) {
+        
+        
         ServerResponse sr = new ServerResponse();
         sr.setNote("ok");
         sr.setRef("23");
         return sr;
     }
-
+        
     private static final class TransferMapper implements RowMapper<Transfertable> {
 
         @Override
