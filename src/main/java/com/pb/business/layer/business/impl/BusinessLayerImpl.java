@@ -6,7 +6,7 @@ package com.pb.business.layer.business.impl;
 
 import Entity.Token;
 import Entity.Transfertable;
-import ResponsePattern.Response;
+import com.pb.business.pattern.Response;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
@@ -14,6 +14,7 @@ import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.json.entity.UserData;
 import com.pb.business.layer.business.BusinessLayer;
 import com.pb.business.layer.dao.DAOLayer;
+import com.pb.business.pattern.Constant;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -42,9 +43,10 @@ public class BusinessLayerImpl implements BusinessLayer {
 
     @Override
     public List<Transfertable> getAllMakers(String userToken) throws ServerException {
-        if (checkToken(userToken) != 0) {
-            throw new ServerException("Иди авторизируйся!", "-112");
-        }
+//        if (checkToken(userToken) != 0) {
+//            throw new ServerException("Иди авторизируйся!", "-112");
+//        }
+        checkToken(userToken);
         return dao.getAllMakers();
     }
 
@@ -52,10 +54,10 @@ public class BusinessLayerImpl implements BusinessLayer {
     public ServerResponse checkData(Data data) throws ServerException {
 
         //проверка на существование и время жизни токена
-        if (checkToken(data.getToken()) != 0) {
-            throw new ServerException("Token is dead, you need autorization", "-1");
-        }
-
+//        if (checkToken(data.getToken()) != 0) {
+//            throw new ServerException("Token is dead, you need autorization", "-1");
+//        }
+        checkToken(data.getToken());
         //Проверка номера телефона отправителя
         if (!checkPhone(data.getSender().getPhoneNumber())) {
             throw new ServerException(Response.IncorrectSenderPhone.MESSAGE, Response.IncorrectSenderPhone.CODE);
@@ -77,6 +79,9 @@ public class BusinessLayerImpl implements BusinessLayer {
 
     @Override
     public ServerResponse deleteTransfer(String transferId) throws ServerException {
+        
+        //checkToken(transferId);
+        
         try {
             Integer.parseInt(transferId);
         } catch (Exception e) {
@@ -121,7 +126,7 @@ public class BusinessLayerImpl implements BusinessLayer {
             try {
                 Integer.parseInt(userData.getSmsPassword());
             } catch (Exception e) {
-                throw new ServerException("Incorrect time password", "-99");
+                throw new ServerException(Response.AuthorizationError.MESSAGE, Response.AuthorizationError.MESSAGE);
             }
         }
 
@@ -130,43 +135,41 @@ public class BusinessLayerImpl implements BusinessLayer {
         AuthorizationResponse ar = new AuthorizationResponse();
         if (response.indexOf("<package_status>ok</package_status>") != -1) {
             String token = generateToken(userData.getPhone());
-            ar.setRes("0");
-            ar.setNote("OK");
+            ar.setRes(Response.Done.CODE);
+            ar.setNote(Response.Done.MESSAGE);
             ar.setToken(token);
             return ar;
         } else {
             ar.setRes("-10");
             ar.setNote("FAILED");
-            ar.setToken("not_cool_session_token");
+            ar.setToken("not_session_token");
             return ar;
         }
 
     }
 
     private String generateToken(String phone) {
-
-        String x = new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime());
         String token = (new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime())) + "_" + phone.substring(1);
         // генерация времени жизни и сохранение в бд
         //String dateChange = Calendar.getInstance().getTime().toString();
         dao.saveToken(token, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS").format(Calendar.getInstance().getTime()));
         return token;
-
     }
 
-    private int checkToken(String token) {
+    private boolean checkToken(String token) throws ServerException {
         // send token to db and check!
         //20130731121746_380934682670
         Token t = dao.getToken(token);
                 
         if (t == null) {
-            return -1;
+            throw new ServerException(Response.AuthorizationError.MESSAGE, Response.AuthorizationError.CODE);
+            //return -1;
         }
         
         // Определить не умер ли токен, если да удалить и послать на авторизацию, если нет то обнулить время жизни
         
         Calendar current = Calendar.getInstance();
-        current.add(Calendar.MINUTE, - 2);
+        current.add(Calendar.MINUTE, - Constant.TOKEN_LIFETIME);
         //TokenEntity te = lte.get(0);
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()));
         Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()) + "CURRENT!!!");
@@ -181,11 +184,13 @@ public class BusinessLayerImpl implements BusinessLayer {
             //проапдейтить время жизни токена в базу
             dao.updateToken(t.getDatechange(), token);
             
-            return 0;
+            return true;
         }
-       //удалить токен т.к. умер
+       //УДАЛИТЬ ИЗ БД т.к. умер. В будущем планируеться добавить сервис удаляющий токены
+        dao.deleteToken(token);
         
-       return -2;
+        throw new ServerException(Response.TokenLifetimeEnd.MESSAGE, Response.TokenLifetimeEnd.CODE);
+       //return -2;
     }
 
     private boolean checkPhone(String phone) {
@@ -221,8 +226,8 @@ public class BusinessLayerImpl implements BusinessLayer {
             sb.append("<?xml version='1.0' encoding='UTF-8'?>");
             sb.append("<request>");
             sb.append("<merchant>");
-            sb.append("<id>").append("428").append("</id>"); //428
-            sb.append("<password>").append("AEXAENAHN8AIFAIZEES9").append("</password>"); //AEXAENAHN8AIFAIZEES9
+            sb.append("<id>").append(Constant.OTP_SMS_SERVICE_ID).append("</id>"); //428
+            sb.append("<password>").append(Constant.OTP_SMS_SERVICE_PASSWORD).append("</password>"); //AEXAENAHN8AIFAIZEES9
             sb.append("<version>1.0</version>");
             sb.append("</merchant>");
             sb.append("<otp_verify>");
@@ -284,8 +289,8 @@ public class BusinessLayerImpl implements BusinessLayer {
             sb.append("<?xml version='1.0' encoding='UTF-8'?>");
             sb.append("<request>");
             sb.append("<merchant>");
-            sb.append("<id>").append("428").append("</id>"); //428
-            sb.append("<password>").append("AEXAENAHN8AIFAIZEES9").append("</password>"); //AEXAENAHN8AIFAIZEES9
+            sb.append("<id>").append(Constant.OTP_SMS_SERVICE_ID).append("</id>"); //428
+            sb.append("<password>").append(Constant.OTP_SMS_SERVICE_PASSWORD).append("</password>"); //AEXAENAHN8AIFAIZEES9
             sb.append("<version>1.0</version>");
             sb.append("</merchant>");
             sb.append("<otp_create>");

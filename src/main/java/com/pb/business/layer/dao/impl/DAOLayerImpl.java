@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.transaction.annotation.Propagation;
@@ -74,11 +76,19 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateToken(Date datechange, String token) {
         getJdbcTemplate().update("UPDATE TOKEN SET TOKEN.DATECHANGE = ? WHERE TOKEN.TOKEN = ?", new Object[]{
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS").format(datechange),
         token
         });
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteToken(String token) {
+        getJdbcTemplate().update("DELETE FROM TOKEN WHERE TOKEN.TOKEN = ?", new Object[]{token});
+        Logger.getLogger(DAOLayerImpl.class.getName()).log(Level.INFO, "Deleted token " + token);
     }
 
     private static final class TransferMapper implements RowMapper<Transfertable> {

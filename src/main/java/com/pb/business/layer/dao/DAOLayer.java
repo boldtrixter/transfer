@@ -21,4 +21,5 @@ public interface DAOLayer {
     void saveToken(String token, String time);
     Token getToken(String token);
     void updateToken(Date datechange, String token);
+    void deleteToken(String token);
 }

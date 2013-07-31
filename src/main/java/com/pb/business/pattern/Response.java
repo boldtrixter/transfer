@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ResponsePattern;
+package com.pb.business.pattern;
 
 /**
  *
@@ -56,5 +56,11 @@ public final class Response {
 
         public static final String MESSAGE = "Ошибка авторизации";
         public static final String CODE = "-7";
+    }
+
+    public static final class TokenLifetimeEnd {
+
+        public static final String MESSAGE = "Вы давно не пользовались сервисом, повторите авторизацию";
+        public static final String CODE = "-8";
     }
 }
