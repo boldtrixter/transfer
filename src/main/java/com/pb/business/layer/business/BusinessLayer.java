@@ -17,7 +17,7 @@ import java.util.List;
  * @author Dmitry
  */
 public interface BusinessLayer {
-    List<Transfertable> getAllMakers();
+    List<Transfertable> getAllMakers(String userToken) throws ServerException;
     public ServerResponse checkData(Data data) throws ServerException;
     public ServerResponse deleteTransfer(String transferId) throws ServerException;
     public ServerResponse getSmsPassword(String phone) throws ServerException;

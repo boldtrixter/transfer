@@ -36,11 +36,11 @@ public class BusinessController {
     public BusinessController() {
     }
 
-    @RequestMapping(value = "/goods", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/goods/{userToken}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public List<Transfertable> getAllMakers() {
+    public List<Transfertable> getAllMakers(@PathVariable String userToken) throws ServerException {
         //logger.debug("Log smth");
-        return business.getAllMakers();
+        return business.getAllMakers(userToken);
     }
     
     @RequestMapping(value = "/setSale", method = RequestMethod.POST, consumes = "application/json")
