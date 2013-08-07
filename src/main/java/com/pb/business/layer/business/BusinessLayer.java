@@ -4,6 +4,7 @@
  */
 package com.pb.business.layer.business;
 
+import Entity.Person;
 import Entity.Transfertable;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
@@ -22,4 +23,5 @@ public interface BusinessLayer {
     public ServerResponse deleteTransfer(String transferId) throws ServerException;
     public ServerResponse getSmsPassword(String phone) throws ServerException;
     public AuthorizationResponse verifyUser(UserData user) throws ServerException;
+    public Person getUserDeTails(String phone)throws ServerException;
 }

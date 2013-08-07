@@ -4,6 +4,7 @@
  */
 package com.pb.business.layer.dao.impl;
 
+import Entity.Person;
 import Entity.Token;
 import Entity.Transfertable;
 import com.pb.business.json.entity.Data;
@@ -12,6 +13,7 @@ import com.pb.business.layer.dao.DAOLayer;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,10 +21,14 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  *
@@ -42,10 +48,13 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = DuplicateKeyException.class)
     public ServerResponse addTransfer(Data data) {
-
-
+               
+                
+        getJdbcTemplate().update("");
+       
+        
         ServerResponse sr = new ServerResponse();
         sr.setNote("ok");
         sr.setRef("23");
@@ -89,6 +98,11 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     public void deleteToken(String token) {
         getJdbcTemplate().update("DELETE FROM TOKEN WHERE TOKEN.TOKEN = ?", new Object[]{token});
         Logger.getLogger(DAOLayerImpl.class.getName()).log(Level.INFO, "Deleted token " + token);
+    }
+
+    @Override
+    public Person getPersonByPhone(String phoneNumber) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private static final class TransferMapper implements RowMapper<Transfertable> {

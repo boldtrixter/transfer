@@ -10,37 +10,37 @@ package com.pb.business.json.entity;
  */
 public class Data {
 
-    private String login;
-    private String password;
-    private String token;
-    private Sender sender;
-    private Receiver receiver;
-    private String name;
-    private String units;
-    private int count;
-    private double price;
-    private double totalPrice;
-    private String description;
-    private String comment;
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    private String token; // токен сессии
+    private String name; // наименование
+    private String units; // ед. измерения
+    private int count; // количество
+    private double price; //цена
+    private double totalPrice; //стоимость = цена * количество
+    private String scanCode; // штрихкод
+    private String standNumber; // номеркузова последние 6 цифр
+    private String description; //описание
+    private String comment; // комментарий
+    private Sender sender; // отправитель
+    private Receiver receiver; // получатель
+  
     public String getToken() {
         return token;
+    }
+
+    public String getScanCode() {
+        return scanCode;
+    }
+
+    public void setScanCode(String scanCode) {
+        this.scanCode = scanCode;
+    }
+
+    public String getStandNumber() {
+        return standNumber;
+    }
+
+    public void setStandNumber(String standNumber) {
+        this.standNumber = standNumber;
     }
 
     public void setToken(String token) {
@@ -119,5 +119,5 @@ public class Data {
     public void setReceiver(Receiver receiver) {
         this.receiver = receiver;
     }
-    
+        
 }

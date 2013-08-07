@@ -4,6 +4,7 @@
  */
 package com.pb.business.layer.dao;
 
+import Entity.Person;
 import Entity.Token;
 import Entity.Transfertable;
 import com.pb.business.json.entity.Data;
@@ -22,4 +23,6 @@ public interface DAOLayer {
     Token getToken(String token);
     void updateToken(Date datechange, String token);
     void deleteToken(String token);
+
+    public Person getPersonByPhone(String phoneNumber);
 }

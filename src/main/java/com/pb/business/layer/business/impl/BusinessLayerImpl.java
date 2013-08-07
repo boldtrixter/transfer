@@ -4,8 +4,11 @@
  */
 package com.pb.business.layer.business.impl;
 
+import Entity.Person;
+import Entity.Product;
 import Entity.Token;
 import Entity.Transfertable;
+import Entity.Unit;
 import com.pb.business.pattern.Response;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
@@ -15,6 +18,7 @@ import com.pb.business.json.entity.UserData;
 import com.pb.business.layer.business.BusinessLayer;
 import com.pb.business.layer.dao.DAOLayer;
 import com.pb.business.pattern.Constant;
+import com.pb.session.promin.EKB;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -53,11 +57,11 @@ public class BusinessLayerImpl implements BusinessLayer {
     @Override
     public ServerResponse checkData(Data data) throws ServerException {
 
-        //проверка на существование и время жизни токена
-//        if (checkToken(data.getToken()) != 0) {
-//            throw new ServerException("Token is dead, you need autorization", "-1");
-//        }
-        checkToken(data.getToken());
+       //проверка на существование и время жизни токена
+        if (!checkToken(data.getToken())) {
+            throw new ServerException("Token is dead, you need autorization", "-1");
+        }
+        //checkToken(data.getToken());
         //Проверка номера телефона отправителя
         if (!checkPhone(data.getSender().getPhoneNumber())) {
             throw new ServerException(Response.IncorrectSenderPhone.MESSAGE, Response.IncorrectSenderPhone.CODE);
@@ -72,16 +76,53 @@ public class BusinessLayerImpl implements BusinessLayer {
         if (data.getName().equals("")) {
             throw new ServerException(Response.IncorrectProductName.MESSAGE, Response.IncorrectProductName.CODE);
         }
-
+        
+        if(data.getScanCode().equals("") && data.getStandNumber().equals("")){
+            throw new ServerException("Пустые штрихкод/номер авто", "-99");
+        }
+        
+        if(!data.getScanCode().equals("")){
+            if(!data.getStandNumber().equals("")){
+                throw new ServerException("Нужен либо штрихкод/либо номер кузова", "-99");
+            }
+        }
+        EKB ekb = new EKB();
+        try {
+            Person sender = ekb.getPersonDetailsByPhone(data.getSender().getPhoneNumber());
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(BusinessLayerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        try {
+            Person receiver = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(BusinessLayerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+//        
+//        Person sender = dao.getPersonByPhone(data.getSender().getPhoneNumber());
+//        
+////        if(sender == null){
+////            sender = 
+////        }
+//        
+//        
+//        
+//        Product product = new Product();
+//        product.setName(data.getName());
+//        product.setScancode(data.getScanCode());
+//        
+//        Unit unit = new Unit();
+//        unit.setName(data.getUnits());
+        
+        
         return dao.addTransfer(data);
 
     }
 
     @Override
     public ServerResponse deleteTransfer(String transferId) throws ServerException {
-        
+
         //checkToken(transferId);
-        
+
         try {
             Integer.parseInt(transferId);
         } catch (Exception e) {
@@ -160,14 +201,14 @@ public class BusinessLayerImpl implements BusinessLayer {
         // send token to db and check!
         //20130731121746_380934682670
         Token t = dao.getToken(token);
-                
+
         if (t == null) {
             throw new ServerException(Response.AuthorizationError.MESSAGE, Response.AuthorizationError.CODE);
             //return -1;
         }
-        
+
         // Определить не умер ли токен, если да удалить и послать на авторизацию, если нет то обнулить время жизни
-        
+
         Calendar current = Calendar.getInstance();
         current.add(Calendar.MINUTE, - Constant.TOKEN_LIFETIME);
         //TokenEntity te = lte.get(0);
@@ -175,22 +216,21 @@ public class BusinessLayerImpl implements BusinessLayer {
         Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()) + "CURRENT!!!");
         Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + "TOKEN!!!");
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()));
- 
-        if(t.getDatechange().after(current.getTime()))
-        {
+
+        if (t.getDatechange().after(current.getTime())) {
             t.setDatechange(Calendar.getInstance().getTime());
             Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + " TOKEN CHANGED!!!");
-            
+
             //проапдейтить время жизни токена в базу
             dao.updateToken(t.getDatechange(), token);
-            
+
             return true;
         }
-       //УДАЛИТЬ ИЗ БД т.к. умер. В будущем планируеться добавить сервис удаляющий токены
+        //УДАЛИТЬ ИЗ БД т.к. умер. В будущем планируеться добавить сервис удаляющий токены
         dao.deleteToken(token);
-        
+
         throw new ServerException(Response.TokenLifetimeEnd.MESSAGE, Response.TokenLifetimeEnd.CODE);
-       //return -2;
+        //return -2;
     }
 
     private boolean checkPhone(String phone) {
@@ -335,5 +375,20 @@ public class BusinessLayerImpl implements BusinessLayer {
                 connection.disconnect();
             }
         }
+    }
+
+    @Override
+    public Person getUserDeTails(String phone) throws ServerException{
+        if (!checkPhone(phone)) {
+            throw new ServerException(Response.IncorrectPhone.MESSAGE, Response.IncorrectPhone.CODE);
+        }
+        
+        EKB ekb = new EKB();
+        try {
+            return ekb.getPersonDetailsByPhone(phone);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(BusinessLayerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
