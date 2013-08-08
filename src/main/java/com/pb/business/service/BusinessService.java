@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.business.layer.business;
+package com.pb.business.service;
 
-import Entity.Person;
-import Entity.Transfertable;
+import com.pb.business.entity.Person;
+import com.pb.business.entity.Transfertable;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Dmitry
  */
-public interface BusinessLayer {
+public interface BusinessService {
     List<Transfertable> getAllMakers(String userToken) throws ServerException;
     public ServerResponse checkData(Data data) throws ServerException;
     public ServerResponse deleteTransfer(String transferId) throws ServerException;

@@ -2,12 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.session.promin;
+package com.pb.business.tools;
 
-/**
- *
- * @author user
- */
 import com.pb.Chameleon.Session.ManagerSystem.SessionManager;
 import com.pb.chameleon.ejb_api.session.LoginException;
 import java.rmi.RemoteException;
@@ -19,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Владислав Волошин
+ * @author Dmitry
  */
 public class Sessions {
 

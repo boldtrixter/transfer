@@ -2,19 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.business.layer.dao.impl;
+package com.pb.business.dao;
 
-import Entity.Person;
-import Entity.Token;
-import Entity.Transfertable;
-import Entity.Unit;
+import com.pb.business.entity.Person;
+import com.pb.business.entity.Token;
+import com.pb.business.entity.Transfertable;
+import com.pb.business.entity.Unit;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
-import com.pb.business.layer.dao.DAOLayer;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,17 +25,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.transaction.TransactionStatus;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  *
  * @author Dmitry
  */
-public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
+
+@Repository("DAO")
+public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
 
     private final String GET_ALL_TRANSFER = "SELECT * FROM TRANSFERTABLE";
     @Autowired
@@ -110,7 +108,7 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteToken(String token) {
         getJdbcTemplate().update("DELETE FROM TOKEN WHERE TOKEN.TOKEN = ?", new Object[]{token});
-        Logger.getLogger(DAOLayerImpl.class.getName()).log(Level.INFO, "Deleted token " + token);
+        Logger.getLogger(BusinessDAOImpl.class.getName()).log(Level.INFO, "Deleted token " + token);
     }
 
     @Override

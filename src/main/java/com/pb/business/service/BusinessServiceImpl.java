@@ -2,23 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.business.layer.business.impl;
+package com.pb.business.service;
 
-import Entity.Person;
-import Entity.Product;
-import Entity.Token;
-import Entity.Transfertable;
-import Entity.Unit;
+import com.pb.business.entity.Person;
+import com.pb.business.entity.Token;
+import com.pb.business.entity.Transfertable;
 import com.pb.business.pattern.Response;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.json.entity.UserData;
-import com.pb.business.layer.business.BusinessLayer;
-import com.pb.business.layer.dao.DAOLayer;
+import com.pb.business.dao.BusinessDAO;
 import com.pb.business.pattern.Constant;
-import com.pb.session.promin.EKB;
+import com.pb.business.tools.EKB;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -40,10 +37,10 @@ import org.springframework.stereotype.Service;
  * @author Dmitry
  */
 @Service
-public class BusinessLayerImpl implements BusinessLayer {
+public class BusinessServiceImpl implements BusinessService {
 
     @Autowired
-    DAOLayer dao;
+    BusinessDAO dao;
 
     @Override
     public List<Transfertable> getAllMakers(String userToken) throws ServerException {
@@ -96,12 +93,12 @@ public class BusinessLayerImpl implements BusinessLayer {
         try {
             Person sender = ekb.getPersonDetailsByPhone(data.getSender().getPhoneNumber());
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BusinessLayerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         try {
             Person receiver = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BusinessLayerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 //        
 //        Person sender = dao.getPersonByPhone(data.getSender().getPhoneNumber());
@@ -219,13 +216,13 @@ public class BusinessLayerImpl implements BusinessLayer {
         current.add(Calendar.MINUTE, - Constant.TOKEN_LIFETIME);
         //TokenEntity te = lte.get(0);
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()));
-        Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()) + "CURRENT!!!");
-        Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + "TOKEN!!!");
+        Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()) + "CURRENT!!!");
+        Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + "TOKEN!!!");
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()));
 
         if (t.getDatechange().after(current.getTime())) {
             t.setDatechange(Calendar.getInstance().getTime());
-            Logger.getLogger(BusinessLayerImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + " TOKEN CHANGED!!!");
+            Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + " TOKEN CHANGED!!!");
 
             //проапдейтить время жизни токена в базу
             dao.updateToken(t.getDatechange(), token);
@@ -393,7 +390,7 @@ public class BusinessLayerImpl implements BusinessLayer {
         try {
             return ekb.getPersonDetailsByPhone(phone);
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BusinessLayerImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         return null;
     }

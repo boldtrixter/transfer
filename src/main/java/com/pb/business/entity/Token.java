@@ -2,33 +2,41 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package com.pb.business.entity;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Dmitry
  */
 
-public class Productscanserialnumber implements Serializable {
+@XmlRootElement
+public class Token implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @NotNull
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "NAME")
-    private String name;
-    @Column(name = "PRODUCT_ID")
-    private BigInteger productId;
+    @Column(name = "DATECHANGE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date datechange;
+    @Column(name = "STATUS")
+    private Short status;
+    @Column(name = "TOKEN")
+    private String token;
 
-    public Productscanserialnumber() {
+    public Token() {
     }
 
-    public Productscanserialnumber(Long id) {
+    public Token(Long id) {
         this.id = id;
     }
 
@@ -40,20 +48,28 @@ public class Productscanserialnumber implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Date getDatechange() {
+        return datechange;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDatechange(Date datechange) {
+        this.datechange = datechange;
     }
 
-    public BigInteger getProductId() {
-        return productId;
+    public Short getStatus() {
+        return status;
     }
 
-    public void setProductId(BigInteger productId) {
-        this.productId = productId;
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
@@ -66,10 +82,10 @@ public class Productscanserialnumber implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Productscanserialnumber)) {
+        if (!(object instanceof Token)) {
             return false;
         }
-        Productscanserialnumber other = (Productscanserialnumber) object;
+        Token other = (Token) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -78,7 +94,7 @@ public class Productscanserialnumber implements Serializable {
 
     @Override
     public String toString() {
-        return "Entity.Productscanserialnumber[ id=" + id + " ]";
+        return "Entity.Token[ id=" + id + " ]";
     }
     
 }

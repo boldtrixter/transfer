@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.session.promin;
+package com.pb.business.tools;
 
-import Entity.Person;
+import com.pb.business.entity.Person;
 import com.pb.business.exception.ServerException;
 import com.pb.cis.toolsn.requestObjects.ClEtc.ICLEtc;
 import com.pb.cis.toolsn.requestObjects.ClEtc.P_CLIENTATTRSRequest;
@@ -23,13 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
- * @author user
+ * @author Dmitry
  */
 public class EKB {
 
 //    @Autowired
 //    @Singleton
 //    private Sessions session;
+    
+
     public Person getPersonDetailsByPhone(String phone) throws Exception {
 
         String pd = sendEKBrequest(phone);
@@ -68,6 +70,12 @@ public class EKB {
         
         return p;
     }
+    /**
+     * 
+     * @param phone Номер телефона клиента
+     * @return String
+     * @throws Exception 
+     */
 
     private String sendEKBrequest(String phone) throws Exception {
 

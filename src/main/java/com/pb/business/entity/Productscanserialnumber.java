@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package com.pb.business.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
@@ -14,19 +15,20 @@ import javax.validation.constraints.NotNull;
  * @author Dmitry
  */
 
-public class Status implements Serializable {
+public class Productscanserialnumber implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @NotNull
-    @Column(name = "ID")
     private Long id;
     @Column(name = "NAME")
     private String name;
+    @Column(name = "PRODUCT_ID")
+    private BigInteger productId;
 
-    public Status() {
+    public Productscanserialnumber() {
     }
 
-    public Status(Long id) {
+    public Productscanserialnumber(Long id) {
         this.id = id;
     }
 
@@ -46,6 +48,14 @@ public class Status implements Serializable {
         this.name = name;
     }
 
+    public BigInteger getProductId() {
+        return productId;
+    }
+
+    public void setProductId(BigInteger productId) {
+        this.productId = productId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -56,10 +66,10 @@ public class Status implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Status)) {
+        if (!(object instanceof Productscanserialnumber)) {
             return false;
         }
-        Status other = (Status) object;
+        Productscanserialnumber other = (Productscanserialnumber) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -68,7 +78,7 @@ public class Status implements Serializable {
 
     @Override
     public String toString() {
-        return "Entity.Status[ id=" + id + " ]";
+        return "Entity.Productscanserialnumber[ id=" + id + " ]";
     }
     
 }

@@ -2,13 +2,13 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <mapping class="Entity.Person" />
-        <mapping class="Entity.Product" />
-        <mapping class="Entity.Productscanserialnumber" />
-        <mapping class="Entity.Status" />
-        <mapping class="Entity.Token" />
-        <mapping class="Entity.Transfer" />
-        <mapping class="Entity.Transfertable" />
-        <mapping class="Entity.Unit" />
+        <mapping class="com.pb.business.entity.Person" />
+        <mapping class="com.pb.business.entity.Product" />
+        <mapping class="com.pb.business.entity.Productscanserialnumber" />
+        <mapping class="com.pb.business.entity.Status" />
+        <mapping class="com.pb.business.entity.Token" />
+        <mapping class="com.pb.business.entity.Transfer" />
+        <mapping class="com.pb.business.entity.Transfertable" />
+        <mapping class="com.pb.business.entity.Unit" />
     </session-factory>
 </hibernate-configuration>

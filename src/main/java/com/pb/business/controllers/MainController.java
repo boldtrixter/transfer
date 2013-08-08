@@ -4,14 +4,14 @@
  */
 package com.pb.business.controllers;
 
-import Entity.Person;
-import Entity.Transfertable;
+import com.pb.business.entity.Person;
+import com.pb.business.entity.Transfertable;
 import com.pb.business.exception.ServerException;
 import com.pb.business.json.entity.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.json.entity.UserData;
-import com.pb.business.layer.business.BusinessLayer;
+import com.pb.business.service.BusinessService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping(value = "/webresources/rest")
-public class BusinessController {
+public class MainController {
 
     @Autowired
-    private BusinessLayer business;
+    private BusinessService business;
 
-    public BusinessController() {
+    public MainController() {
     }
 
     @RequestMapping(value = "/do-something", method = RequestMethod.GET)
@@ -95,5 +95,5 @@ public class BusinessController {
         sr.setNote(ex.getMessage());
         return sr;
     }
-    //366824
+
 }
