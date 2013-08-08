@@ -9,7 +9,7 @@ import com.pb.business.entity.Token;
 import com.pb.business.entity.Transfertable;
 import com.pb.business.entity.Unit;
 import com.pb.business.json.entity.Data;
-import com.pb.business.json.entity.ServerResponse;
+import com.pb.business.message.ServerResponse;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;

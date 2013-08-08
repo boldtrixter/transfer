@@ -8,7 +8,7 @@ import com.pb.business.entity.Person;
 import com.pb.business.entity.Token;
 import com.pb.business.entity.Transfertable;
 import com.pb.business.json.entity.Data;
-import com.pb.business.json.entity.ServerResponse;
+import com.pb.business.message.ServerResponse;
 import java.util.Date;
 import java.util.List;
 

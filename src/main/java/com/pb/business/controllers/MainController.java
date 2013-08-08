@@ -6,10 +6,10 @@ package com.pb.business.controllers;
 
 import com.pb.business.entity.Person;
 import com.pb.business.entity.Transfertable;
-import com.pb.business.exception.ServerException;
-import com.pb.business.json.entity.AuthorizationResponse;
+import com.pb.business.message.ServerException;
+import com.pb.business.message.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
-import com.pb.business.json.entity.ServerResponse;
+import com.pb.business.message.ServerResponse;
 import com.pb.business.json.entity.UserData;
 import com.pb.business.service.BusinessService;
 import java.util.List;

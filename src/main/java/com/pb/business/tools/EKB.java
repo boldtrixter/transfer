@@ -5,7 +5,7 @@
 package com.pb.business.tools;
 
 import com.pb.business.entity.Person;
-import com.pb.business.exception.ServerException;
+import com.pb.business.message.ServerException;
 import com.pb.cis.toolsn.requestObjects.ClEtc.ICLEtc;
 import com.pb.cis.toolsn.requestObjects.ClEtc.P_CLIENTATTRSRequest;
 import com.pb.cis.toolsn.requestObjects.FactoryRequest;
