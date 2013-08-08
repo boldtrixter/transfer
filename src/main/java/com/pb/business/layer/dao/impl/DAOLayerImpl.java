@@ -56,7 +56,7 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
     @Transactional
     public void hiberTest(){
         Unit u = new Unit();
-        u.setName("литр");
+        u.setName("КН");
         sf.getCurrentSession().persist(u);
     }
     

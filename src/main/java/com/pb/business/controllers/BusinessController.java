@@ -7,26 +7,13 @@ package com.pb.business.controllers;
 import Entity.Person;
 import Entity.Transfertable;
 import com.pb.business.exception.ServerException;
-import com.pb.business.jaxb.entity.PersonDetails;
 import com.pb.business.json.entity.AuthorizationResponse;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.json.entity.UserData;
 import com.pb.business.layer.business.BusinessLayer;
-import com.pb.session.promin.EKB;
-import com.pb.session.promin.Sessions;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -61,12 +48,12 @@ public class BusinessController {
     @ResponseBody
     public String doHiber(HttpServletRequest request) throws Exception {
         
-        String ip = request.getRemoteAddr();
-        String prefix = " access permitted!";
-        String msg = "You trying connect to PrivatTransfer from IP: " + ip + prefix;
-        return msg;
+//        String ip = request.getRemoteAddr();
+//        String prefix = " access permitted!";
+//        String msg = "You trying connect to PrivatTransfer from IP: " + ip + prefix;
+//        return msg;
         
-        //return business.hiberTest();
+        return business.hiberTest();
     }
 
     @RequestMapping(value = "/goods/{userToken}", method = RequestMethod.GET, produces = "application/json")
