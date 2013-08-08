@@ -7,6 +7,7 @@ package com.pb.business.layer.dao.impl;
 import Entity.Person;
 import Entity.Token;
 import Entity.Transfertable;
+import Entity.Unit;
 import com.pb.business.json.entity.Data;
 import com.pb.business.json.entity.ServerResponse;
 import com.pb.business.layer.dao.DAOLayer;
@@ -21,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -37,6 +40,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
 
     private final String GET_ALL_TRANSFER = "SELECT * FROM TRANSFERTABLE";
+    @Autowired
+    SessionFactory sf;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -46,7 +51,15 @@ public class DAOLayerImpl extends JdbcDaoSupport implements DAOLayer {
         // String s = list.get(0).getFio() + " " + list.get(0).getPhonenumber();
         return list;
     }
-
+    
+    @Override
+    @Transactional
+    public void hiberTest(){
+        Unit u = new Unit();
+        u.setName("литр");
+        sf.getCurrentSession().persist(u);
+    }
+    
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = DuplicateKeyException.class)
     public ServerResponse addTransfer(Data data) {

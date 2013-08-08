@@ -24,4 +24,5 @@ public interface BusinessLayer {
     public ServerResponse getSmsPassword(String phone) throws ServerException;
     public AuthorizationResponse verifyUser(UserData user) throws ServerException;
     public Person getUserDeTails(String phone)throws ServerException;
+    public String hiberTest();
 }

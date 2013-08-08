@@ -53,6 +53,12 @@ public class BusinessLayerImpl implements BusinessLayer {
         checkToken(userToken);
         return dao.getAllMakers();
     }
+    
+    @Override
+    public String hiberTest(){
+        dao.hiberTest();
+        return "ok";
+    }
 
     @Override
     public ServerResponse checkData(Data data) throws ServerException {

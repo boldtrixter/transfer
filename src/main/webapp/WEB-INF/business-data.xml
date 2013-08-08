@@ -2,12 +2,26 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-              
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd    
 ">
-    <!--org.apache.commons.dbcp.BasicDataSource  Дата сорс-->
+    
+    <!--  PACKAGES WHICH WILL SCANNIG ON ANNOTATIONS  -->
+    <context:component-scan base-package="com.pb.business.controllers" />
+    <context:component-scan base-package="com.pb.business.layer.business" />
+    <context:component-scan base-package="com.pb.business.layer.business.impl" />
+    <context:component-scan base-package="com.pb.business.layer.dao" />
+    <context:component-scan base-package="com.pb.business.layer.dao.impl" />
+    <context:component-scan base-package="com.pb.business.json.entity" />
+    <context:component-scan base-package="com.pb.business.exception" />
+    <context:component-scan base-package="Entity" />
+    <!--  PACKAGES WHICH WILL SCANNIG ON ANNOTATIONS  -->
+    
+    <!--  DATA SOURCE  -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
             <value>${jdbc.driverClassName}</value>
@@ -22,18 +36,37 @@
             <value>${jdbc.password}</value>
         </property>
     </bean>
+    <!--  DATA SOURCE  -->
     
-    <!--Менеджер транзакций-->
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
+    <!-- SESSION FACTORY-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:/hibernate.cfg.xml" />
+        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+            </props>
+        </property>
     </bean>
+    <!-- SESSION FACTORY-->
     
-    <!-- Присоединяем dataSource к DAO-классам -->
+    <!--  RENAME STANDART TRANSACTION MANAGER  -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <!--  RENAME STANDART TRANSACTION MANAGER  -->
+    
+    <!--  TRANSACTION MANAGER  -->
+    <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!--  TRANSACTION MANAGER  -->
+    
+    <!-- ПРРИСОЕДИНЯЕМ dataSource к DAO-классам -->
     <bean id="DAO" class="com.pb.business.layer.dao.impl.DAOLayerImpl">
         <property name="dataSource" ref="dataSource" />
     </bean>
     
-    <!--Настройки dataSource-->
+    <!--НАСТРОЙКИ dataSource-->
     <context:property-placeholder location="classpath:/jdbc.properties"/>
 
 </beans>

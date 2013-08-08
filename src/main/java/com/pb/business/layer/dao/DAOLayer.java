@@ -23,6 +23,7 @@ public interface DAOLayer {
     Token getToken(String token);
     void updateToken(Date datechange, String token);
     void deleteToken(String token);
+    void hiberTest();
 
     public Person getPersonByPhone(String phoneNumber);
 }

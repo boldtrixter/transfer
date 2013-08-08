@@ -1,52 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:mvc="http://www.springframework.org/schema/mvc"
-xmlns:tx="http://www.springframework.org/schema/tx"
-xmlns:context="http://www.springframework.org/schema/context"
-xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
-                    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd     
-                    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-                    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd     
+                           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+    
+    <!--   STRING MESSAGE CONVERTER (!!!ONLY FOR TESTS!!!) -->
     <mvc:annotation-driven>
-       <!-- <mvc:message-converters>
-            <bean id="marshallingHttpMessageConverter" 
-                  class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-                <property name="marshaller" ref="xmlMarshaller"/>
-                <property name="unmarshaller" ref="xmlMarshaller"/>
-            </bean> 
-            
+        <mvc:message-converters>
             <bean id="stringHttpMessageConverter" 
                   class="org.springframework.http.converter.StringHttpMessageConverter">
             </bean>
-        
-        </mvc:message-converters>-->
-        <mvc:message-converters>
-                        <bean id="stringHttpMessageConverter" 
-                  class="org.springframework.http.converter.StringHttpMessageConverter">
-            </bean>
-        </mvc:message-converters>
-        
+        </mvc:message-converters>   
     </mvc:annotation-driven>
+    <!--   STRING MESSAGE CONVERTER (!!!ONLY FOR TESTS!!!) -->
     
-    <!--Классы которые сканируються на анотации-->
+    <!--  ACTIVATE ANNOTATIONS IN BEANS  -->
     <context:annotation-config/>
-   
-    <context:component-scan base-package="com.pb.business.controllers" />
-    <context:component-scan base-package="com.pb.business.layer.business" />
-    <context:component-scan base-package="com.pb.business.layer.business.impl" />
-    <context:component-scan base-package="com.pb.business.layer.dao" />
-    <context:component-scan base-package="com.pb.business.layer.dao.impl" />
-    <context:component-scan base-package="com.pb.business.json.entity" />
-    <context:component-scan base-package="com.pb.business.exception" />
-    <context:component-scan base-package="Entity" />
+    <!--  ACTIVATE ANNOTATIONS IN BEANS  -->
     
-    <!--ТУТ ПРОБЛЕМЫ!!!  org.springframework.oxm.jaxb.Jaxb2Marshaller
-    <bean id="xmlMarshaller" class="org.springframework.oxm.jaxb.Jaxb1Marshaller">
-        <property name="contextPath" value="com.pb.shop.model"/>
-    </bean>-->
-
-    <!--Вьюха-->
+    <!--  VIEW RESOLVER (!!!ONLY FOR TESTS!!!)  -->
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix">
@@ -56,4 +33,21 @@ xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springf
             <value>.jsp</value>
         </property>
     </bean>
+    <!--  VIEW RESOLVER (!!!ONLY FOR TESTS!!!)  -->
+    
+    <!--  SHARE SETTINGS  -->
+    <import resource="business-data.xml"/>
+    <!--  SHARE SETTINGS  -->
+    
+           <!-- <mvc:message-converters>
+            <bean id="marshallingHttpMessageConverter" 
+                  class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+                <property name="marshaller" ref="xmlMarshaller"/>
+                <property name="unmarshaller" ref="xmlMarshaller"/>
+            </bean> 
+            
+            <bean id="stringHttpMessageConverter" 
+                  class="org.springframework.http.converter.StringHttpMessageConverter">
+            </bean>
+        </mvc:message-converters>-->
 </beans>

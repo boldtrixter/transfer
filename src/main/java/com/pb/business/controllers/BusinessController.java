@@ -56,6 +56,18 @@ public class BusinessController {
         
         return business.getUserDeTails("+380934682670");
     }
+    
+    @RequestMapping(value = "/do-hiber", method = RequestMethod.GET)
+    @ResponseBody
+    public String doHiber(HttpServletRequest request) throws Exception {
+        
+        String ip = request.getRemoteAddr();
+        String prefix = " access permitted!";
+        String msg = "You trying connect to PrivatTransfer from IP: " + ip + prefix;
+        return msg;
+        
+        //return business.hiberTest();
+    }
 
     @RequestMapping(value = "/goods/{userToken}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
