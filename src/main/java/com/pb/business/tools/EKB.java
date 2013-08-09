@@ -6,9 +6,6 @@ package com.pb.business.tools;
 
 import com.pb.business.entity.Person;
 import com.pb.business.message.ServerException;
-import com.pb.cis.toolsn.requestObjects.ClEtc.ICLEtc;
-import com.pb.cis.toolsn.requestObjects.ClEtc.P_CLIENTATTRSRequest;
-import com.pb.cis.toolsn.requestObjects.FactoryRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -16,10 +13,8 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import javax.inject.Singleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -110,11 +105,7 @@ public class EKB {
             sb.append("<ruLName></ruLName>");
             sb.append("<ruFName></ruFName>");
             sb.append("<ruMName></ruMName>");
-//            sb.append("<enLName></enLName>");
-//            sb.append("<enFName></enFName>");
-//            sb.append("<enMName></enMName>");
             sb.append("</o>");
-            //  sb.append("<t ></t>");
             sb.append("</r>");
             sb.append("</doc>");
 
