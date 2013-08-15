@@ -4,24 +4,29 @@
  */
 package com.pb.business.entity;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author Dmitry
  */
-
-public class Transfer implements Serializable {
-    private static final long serialVersionUID = 1L;
+@Entity
+@Table(name = "TRANSFER")
+public class Transfer {
     @Id
     @NotNull
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "ID")
     private Long id;
     @Column(name = "DATECHANGE")
@@ -130,31 +135,5 @@ public class Transfer implements Serializable {
 
     public void setTypeprocess(Short typeprocess) {
         this.typeprocess = typeprocess;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Transfer)) {
-            return false;
-        }
-        Transfer other = (Transfer) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Entity.Transfer[ id=" + id + " ]";
-    }
-    
+    }    
 }

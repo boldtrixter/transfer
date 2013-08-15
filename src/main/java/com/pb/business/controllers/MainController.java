@@ -4,11 +4,10 @@
  */
 package com.pb.business.controllers;
 
-import com.pb.business.entity.Person;
 import com.pb.business.entity.Transfertable;
 import com.pb.business.message.ServerException;
 import com.pb.business.message.AuthorizationResponse;
-import com.pb.business.json.entity.Data;
+import com.pb.business.json.entity.TransferDetails;
 import com.pb.business.message.ServerResponse;
 import com.pb.business.json.entity.UserData;
 import com.pb.business.service.BusinessService;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 /**
  *
  * @author Dmitry
@@ -36,15 +36,35 @@ public class MainController {
 
     public MainController() {
     }
-
-    @RequestMapping(value = "/do-something", method = RequestMethod.GET)
+    
+    @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ResponseBody
-    public Person doSomething(HttpServletRequest request) throws Exception {
+    public void saveImage() throws Exception {
         
-        return business.getUserDeTails("+380934682670");
+        //business.
+        
+//         BufferedReader reader  = new BufferedReader(new FileReader(new File("/home/user/img.txt")));
+//        
+//         StringBuilder builder = new StringBuilder();
+//         String line;
+//         while((line = reader.readLine()) != null){
+//             builder.append(line);
+//         }
+//        String base64String = builder.toString();
+//        byte[] imageByteArray = Base64.decodeBase64(base64String);
+//        try {
+//            FileOutputStream imageOutFile = new FileOutputStream(
+//                    "/home/user/TransferImg/" + "pic" + ".jpg");
+//
+//            imageOutFile.write(imageByteArray);
+//            imageOutFile.close();
+//        } catch (IOException ex) {
+//           // Logger.getLogger(null, null, ex);
+//        }
+
     }
     
-    @RequestMapping(value = "/do-hiber", method = RequestMethod.GET)
+    @RequestMapping(value = "/do-hibe", method = RequestMethod.GET)
     @ResponseBody
     public String doHiber(HttpServletRequest request) throws Exception {
         
@@ -63,10 +83,11 @@ public class MainController {
         return business.getAllMakers(userToken);
     }
 
-    @RequestMapping(value = "/setSale", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/addTransfer", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ServerResponse addTransfer(@RequestBody Data d) throws ServerException {
-        return business.checkData(d);
+    public ServerResponse addTransfer(@RequestBody TransferDetails transferDetails, HttpServletRequest request) throws Exception {
+        String ip = request.getRemoteAddr();
+        return business.addTransfer(transferDetails, ip);
     }
 
     @RequestMapping(value = "/deleteTransfer/{id}", method = RequestMethod.GET, produces = "application/json")

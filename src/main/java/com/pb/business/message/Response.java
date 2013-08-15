@@ -34,9 +34,21 @@ public final class Response {
         public static final String CODE = "-3";
     }
 
+    public static final class IncorrectCarrierPhone {
+
+        public static final String MESSAGE = "Неправильный номер телефона перевозчика";
+        public static final String CODE = "-9";
+    }
+
+    public static final class IncorrectDate {
+
+        public static final String MESSAGE = "Неверный формат даты, необходимый формат dd:mm:yyyy hh:mm";
+        public static final String CODE = "-10";
+    }
+
     public static final class IncorrectProductName {
 
-        public static final String MESSAGE = "Неправильное название товара";
+        public static final String MESSAGE = "Наименование товара не может быть пустым";
         public static final String CODE = "-4";
     }
 
@@ -62,5 +74,23 @@ public final class Response {
 
         public static final String MESSAGE = "Вы давно не пользовались сервисом, повторите авторизацию";
         public static final String CODE = "-8";
+    }
+
+    public static final class IncorrectAcceptanceType {
+
+        public static final String MESSAGE = "Неверный тип подтверждения";
+        public static final String CODE = "-10";
+    }
+
+    public static final class IncorrectCallbackLink {
+
+        public static final String MESSAGE = "Необходимо указать линк для подтверждения";
+        public static final String CODE = "-11";
+    }
+
+    public static final class AccessDenied {
+
+        public static final String MESSAGE = "Доступ запрещен";
+        public static final String CODE = "-12";
     }
 }

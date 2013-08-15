@@ -5,10 +5,11 @@
 package com.pb.business.dao;
 
 import com.pb.business.entity.Person;
+import com.pb.business.entity.Security;
 import com.pb.business.entity.Token;
 import com.pb.business.entity.Transfertable;
 import com.pb.business.entity.Unit;
-import com.pb.business.json.entity.Data;
+import com.pb.business.json.entity.TransferDetails;
 import com.pb.business.message.ServerResponse;
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -18,8 +19,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.Query;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -33,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Dmitry
  */
-
 @Repository("DAO")
 public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
 
@@ -49,23 +51,23 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
         // String s = list.get(0).getFio() + " " + list.get(0).getPhonenumber();
         return list;
     }
-    
+
     @Override
     @Transactional
-    public void hiberTest(){
+    public void hiberTest() {
         Unit u = new Unit();
         u.setName("КН");
         sf.getCurrentSession().persist(u);
     }
-    
+
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = DuplicateKeyException.class)
-    public ServerResponse addTransfer(Data data) {
-               
-                
+    public ServerResponse addTransfer(TransferDetails data) {
+
+
         getJdbcTemplate().update("");
-       
-        
+
+
         ServerResponse sr = new ServerResponse();
         sr.setNote("ok");
         sr.setRef("23");
@@ -75,7 +77,7 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveToken(String token, String time) {
-        
+
         //Обязательно переделать ИД сделать автоинкремент!!!
         getJdbcTemplate().update("insert into TOKEN(TOKEN.ID, TOKEN.DATECHANGE, TOKEN.TOKEN) values(?, ?, ?)", new Object[]{
             new BigInteger(new SimpleDateFormat("yyMMddHHmm").format(Calendar.getInstance().getTime())).intValue(),
@@ -89,7 +91,7 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
     @Transactional(propagation = Propagation.REQUIRED)
     public Token getToken(String token) {
         List<Token> list = getJdbcTemplate().query("SELECT TOKEN.ID, TOKEN.DATECHANGE, TOKEN.TOKEN FROM TOKEN WHERE TOKEN.TOKEN = ?", new Object[]{token}, new TokenMapper());
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
@@ -99,8 +101,8 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateToken(Date datechange, String token) {
         getJdbcTemplate().update("UPDATE TOKEN SET TOKEN.DATECHANGE = ? WHERE TOKEN.TOKEN = ?", new Object[]{
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS").format(datechange),
-        token
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS").format(datechange),
+            token
         });
     }
 
@@ -112,8 +114,30 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Person getPersonByPhone(String phoneNumber) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Person> list = sf.getCurrentSession().
+                createQuery("from Person p where p.phonenumber like:phone").
+                setString("phone", "%+380934682670").list();
+
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public boolean checkIp(String ip) {
+//        List<Security> list = sf.getCurrentSession().
+//                createQuery("from Security s where s.ip=:ip").
+//                setString("ip", ip).list();
+//        
+//        if(list.isEmpty()){
+//            return false;
+//        }
+        
+        return false;
     }
 
     private static final class TransferMapper implements RowMapper<Transfertable> {
@@ -156,8 +180,8 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
 
         }
     }
-    
-        private static final class TokenMapper implements RowMapper<Token> {
+
+    private static final class TokenMapper implements RowMapper<Token> {
 
         @Override
         public Token mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -166,8 +190,8 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
             t.setId(rs.getLong("ID"));
             t.setDatechange(rs.getDate("DATECHANGE"));
             t.setToken(rs.getString("TOKEN"));
-            
-            
+
+
 //            Transfertable t = new Transfertable();
 //            t.setId(rs.getLong("ID"));
 //            t.setCurrency(rs.getString("CURRENCY"));

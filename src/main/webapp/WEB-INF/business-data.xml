@@ -64,7 +64,18 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
     <!-- MAPPING dataSource ON DAO-CLASSES (IT WAS CHANGED ON HIBERNATE, WILL DELETED ON TIME) -->
+
+    <bean id="sessions" class="com.pb.business.tools.Sessions" >
+        <constructor-arg  value="http://10.1.108.22:8071/ChameleonServer"/>
+        <constructor-arg  value="UTSM"/>
+        <constructor-arg  value="EXCL"/>
+        <constructor-arg  value="GFhJUKIghFgh"/>
+    </bean>
     
+    <bean id="ekbRequest" class="com.pb.business.tools.EKBRequest">
+        <property name="session" ref="sessions"/>
+    </bean>    
+        
     <!--  DATASOURCE SETTINGSD  -->
     <context:property-placeholder location="classpath:/jdbc.properties"/>
     <!--  DATASOURCE SETTINGSD  -->

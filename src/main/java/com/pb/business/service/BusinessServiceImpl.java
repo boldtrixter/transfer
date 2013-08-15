@@ -10,12 +10,12 @@ import com.pb.business.entity.Transfertable;
 import com.pb.business.message.Response;
 import com.pb.business.message.ServerException;
 import com.pb.business.message.AuthorizationResponse;
-import com.pb.business.json.entity.Data;
+import com.pb.business.json.entity.TransferDetails;
 import com.pb.business.message.ServerResponse;
 import com.pb.business.json.entity.UserData;
 import com.pb.business.dao.BusinessDAO;
 import com.pb.business.tools.Constant;
-import com.pb.business.tools.EKB;
+import com.pb.business.tools.EKBRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -41,6 +41,8 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Autowired
     BusinessDAO dao;
+    @Autowired
+    EKBRequest ekb;
 
     @Override
     public List<Transfertable> getAllMakers(String userToken) throws ServerException {
@@ -50,56 +52,142 @@ public class BusinessServiceImpl implements BusinessService {
         checkToken(userToken);
         return dao.getAllMakers();
     }
-    
+
     @Override
-    public String hiberTest(){
+    public String hiberTest() {
         dao.hiberTest();
         return "ok";
     }
 
     @Override
-    public ServerResponse checkData(Data data) throws ServerException {
+    @SuppressWarnings("UnusedAssignment")
+    public ServerResponse addTransfer(TransferDetails transferDetails, String ip) throws Exception {
 
-       //проверка на существование и время жизни токена
-        if (!checkToken(data.getToken())) {
-            throw new ServerException("Token is dead, you need autorization", "-1");
+//        проверка на существование и время жизни токена
+//        if (!checkToken(transferDetails.getToken())) {
+//            throw new ServerException("Token is dead, you need autorization", "-1");
+//        }
+
+        if (!checkIp(ip)) {
+            throw new ServerException(Response.AccessDenied.MESSAGE + " c IP: " + ip, Response.AccessDenied.CODE);
         }
-        //checkToken(data.getToken());
-        //Проверка номера телефона отправителя
-        if (!checkPhone(data.getSender().getPhoneNumber())) {
+        
+
+        if ((!checkPhone(transferDetails.getSenderPhone())) || transferDetails.getSenderPhone().equals("")) {
             throw new ServerException(Response.IncorrectSenderPhone.MESSAGE, Response.IncorrectSenderPhone.CODE);
         }
 
-        //Проверка номера телефона получателя
-        if (!checkPhone(data.getReceiver().getPhoneNumber())) {
+        if (!checkPhone(transferDetails.getRecipientPhone()) || transferDetails.getRecipientPhone().equals("")) {
             throw new ServerException(Response.IncorrectReceiverPhone.MESSAGE, Response.IncorrectReceiverPhone.CODE);
         }
 
-        //Имя товара
-        if (data.getName().equals("")) {
+        if (!checkPhone(transferDetails.getCarrierPhone()) || transferDetails.getCarrierPhone().equals("")) {
+            throw new ServerException(Response.IncorrectCarrierPhone.MESSAGE, Response.IncorrectCarrierPhone.CODE);
+        }
+
+        if (!checkDateTime(transferDetails.getDateTime()) || transferDetails.getDateTime().equals("")) {
+            throw new ServerException(Response.IncorrectDate.MESSAGE, Response.IncorrectDate.CODE);
+        }
+
+        if (transferDetails.getName().equals("")) {
             throw new ServerException(Response.IncorrectProductName.MESSAGE, Response.IncorrectProductName.CODE);
         }
-        
-        if(data.getScanCode().equals("") && data.getStandNumber().equals("")){
-            throw new ServerException("Пустые штрихкод/номер авто", "-99");
+
+        if ((!transferDetails.getAcceptanceType().equals("SMS") && !transferDetails.getAcceptanceType().equals("PHOTO")) || transferDetails.getAcceptanceType().equals("")) {
+            throw new ServerException(Response.IncorrectAcceptanceType.MESSAGE, Response.IncorrectAcceptanceType.CODE);
         }
-        
-        if(!data.getScanCode().equals("")){
-            if(!data.getStandNumber().equals("")){
-                throw new ServerException("Нужен либо штрихкод/либо номер кузова", "-99");
-            }
+
+        if (transferDetails.getCallbackLink().equals("")) {
+            throw new ServerException(Response.IncorrectCallbackLink.MESSAGE, Response.IncorrectCallbackLink.CODE);
         }
-        EKB ekb = new EKB();
-        try {
-            Person sender = ekb.getPersonDetailsByPhone(data.getSender().getPhoneNumber());
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        //!!!!ДАННЫЕ ПРОВЕРЕНЫ 
+
+        // ПРОВЕРЯЕМ НА СОВПАДЕНГИЯ С БД!!!!
+
+        Person sender = dao.getPersonByPhone(transferDetails.getSenderPhone());
+
+        if (sender == null) {
+            sender = ekb.getPersonDetailsByPhone(transferDetails.getSenderPhone());
         }
-        try {
-            Person receiver = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+        Person recipient = dao.getPersonByPhone(transferDetails.getRecipientPhone());
+
+        if (recipient == null) {
+            recipient = ekb.getPersonDetailsByPhone(transferDetails.getRecipientPhone());
         }
+
+        Person carrier = dao.getPersonByPhone(transferDetails.getCarrierPhone());
+
+        if (carrier == null) {
+            carrier = ekb.getPersonDetailsByPhone(transferDetails.getCarrierPhone());
+        }
+
+        //Заполняем трансфер, затем доступный трансфер
+        //Ложим в бд
+
+
+        //return dao.addTransfer(data);
+
+        ServerResponse sr = new ServerResponse();
+        sr.setNote("Прошли валидацию");
+        sr.setRef("0");
+        return sr;
+
+
+        //checkToken(data.getToken());
+        //Проверка номера телефона отправителя
+//        if (!checkPhone(data.getSender().getPhoneNumber())) {
+//            throw new ServerException(Response.IncorrectSenderPhone.MESSAGE, Response.IncorrectSenderPhone.CODE);
+//        }
+//
+//        //Проверка номера телефона получателя
+//        if (!checkPhone(data.getReceiver().getPhoneNumber())) {
+//            throw new ServerException(Response.IncorrectReceiverPhone.MESSAGE, Response.IncorrectReceiverPhone.CODE);
+//        }
+//
+//        //Имя товара
+//        if (data.getName().equals("")) {
+//            throw new ServerException(Response.IncorrectProductName.MESSAGE, Response.IncorrectProductName.CODE);
+//        }
+//
+//        if (data.getScanCode().equals("") && data.getStandNumber().equals("")) {
+//            throw new ServerException("Пустые штрихкод/номер авто", "-99");
+//        }
+//
+//        if (!data.getScanCode().equals("")) {
+//            if (!data.getStandNumber().equals("")) {
+//                throw new ServerException("Нужен либо штрихкод/либо номер кузова", "-99");
+//            }
+//        }
+
+        //  EKBRequest eKBRequest = new EKBRequest();
+        // try {
+        //EKB ekb = new EKB();
+        // Sessions session = new Sessions("http://10.1.108.22:8071/ChameleonServer", "UTSM", "EXCL", "GFhJUKIghFgh");
+        //String s = "";
+
+        // s = session.getSession();
+        //Person p = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
+        //p = ekb.getPersonDetailsByPhone(data.getSender().getPhoneNumber());
+        //p = eKBRequest.getPersonDetailsByPhone(data.getSender().getPhoneNumber());
+//        } catch (Exception ex) {
+//            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        EKBRequest ekb = new EKBRequest();
+//        ekb.setCountry("UA");
+//        ekb.setPhone("+380934682670");
+//        ekb.setSid("130812PL0vj12ic3oaaa");
+//        try {
+////            com.pb.business.tools.PersonDetails sender = ekb.getResponse();
+//        } catch (Exception ex) {
+//            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        try {
+//            Person receiver = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
+//        } catch (Exception ex) {
+//            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
 //        
 //        Person sender = dao.getPersonByPhone(data.getSender().getPhoneNumber());
 //        
@@ -115,10 +203,6 @@ public class BusinessServiceImpl implements BusinessService {
 //        
 //        Unit unit = new Unit();
 //        unit.setName(data.getUnits());
-        
-        
-        return dao.addTransfer(data);
-
     }
 
     @Override
@@ -213,7 +297,7 @@ public class BusinessServiceImpl implements BusinessService {
         // Определить не умер ли токен, если да удалить и послать на авторизацию, если нет то обнулить время жизни
 
         Calendar current = Calendar.getInstance();
-        current.add(Calendar.MINUTE, - Constant.TOKEN_LIFETIME);
+        current.add(Calendar.MINUTE, -Constant.TOKEN_LIFETIME);
         //TokenEntity te = lte.get(0);
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()));
         Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()) + "CURRENT!!!");
@@ -236,6 +320,10 @@ public class BusinessServiceImpl implements BusinessService {
         //return -2;
     }
 
+    private boolean checkIp(String ip) {
+        return dao.checkIp(ip);
+    }
+
     private boolean checkPhone(String phone) {
 
         Pattern ua = Pattern.compile("\\+380\\d{9}");
@@ -248,6 +336,18 @@ public class BusinessServiceImpl implements BusinessService {
             return true;
         }
         return false;
+    }
+
+    private boolean checkDateTime(String dateTime) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy hh:mm");
+        formatter.setLenient(false);
+
+        try {
+            formatter.parse(dateTime);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     private String checkSmsPassword(String phone, String smsPassword) throws ServerException {
@@ -378,20 +478,5 @@ public class BusinessServiceImpl implements BusinessService {
                 connection.disconnect();
             }
         }
-    }
-
-    @Override
-    public Person getUserDeTails(String phone) throws ServerException{
-        if (!checkPhone(phone)) {
-            throw new ServerException(Response.IncorrectPhone.MESSAGE, Response.IncorrectPhone.CODE);
-        }
-        
-        EKB ekb = new EKB();
-        try {
-            return ekb.getPersonDetailsByPhone(phone);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        return null;
     }
 }
