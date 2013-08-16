@@ -103,6 +103,7 @@ public class BusinessDAOImpl extends JdbcDaoSupport implements BusinessDAO {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = DuplicateKeyException.class)
     public ServerResponse addTransfer(Transfer transfer) {
 
+            String s ="Поработай плз дома!!!";
 //        if (transfer.getSenderid().getId() != null) {
 //            sf.getCurrentSession().merge(transfer.getSenderid());
 //        }else{
