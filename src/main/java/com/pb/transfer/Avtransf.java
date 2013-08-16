@@ -2,54 +2,71 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.business.entity;
+package com.pb.transfer;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
- * @author Dmitry
+ * @author user
  */
 @Entity
-@Table(name = "STATUS")
-public class Status {
+@Table(name = "AVTRANSF")
+public class Avtransf {
     @Id
     @NotNull
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "ID")
-    private Long id;
-    @Column(name = "NAME")
-    private String name;
+    private Integer id;
+    @JoinColumn(name = "TRANSFERID", referencedColumnName = "ID")
+    @ManyToOne
+    private Transfer transferId;
+    @JoinColumn(name = "PERSONID", referencedColumnName = "ID")
+    @ManyToOne
+    private Person personId;
 
-    public Status() {
+    public Avtransf() {
     }
 
-    public Status(Long id) {
+    public Avtransf(Integer id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Transfer getTransferid() {
+        return transferId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTransferid(Transfer transferid) {
+        this.transferId = transferid;
+    }
+
+    public Person getPersonid() {
+        return personId;
+    }
+
+    public void setPersonid(Person personid) {
+        this.personId = personid;
     }
 
     @Override
@@ -62,10 +79,10 @@ public class Status {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Status)) {
+        if (!(object instanceof Avtransf)) {
             return false;
         }
-        Status other = (Status) object;
+        Avtransf other = (Avtransf) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -74,7 +91,6 @@ public class Status {
 
     @Override
     public String toString() {
-        return "Entity.Status[ id=" + id + " ]";
+        return "com.pb.transfer.Avtransf[ id=" + id + " ]";
     }
-    
 }

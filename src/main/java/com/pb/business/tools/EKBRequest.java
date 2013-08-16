@@ -4,8 +4,9 @@
  */
 package com.pb.business.tools;
 
-import com.pb.business.entity.Person;
+
 import com.pb.business.message.ServerException;
+import com.pb.transfer.Person;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -68,10 +69,13 @@ public class EKBRequest {
             return null;
         }
 
+        p.setFname(pd.getFName());
+        p.setMname(pd.getMName());
+        p.setLname(pd.getLName());
+        
         p.setPhonenumber(phone);
-        p.setFio(pd.getLName() + " " + pd.getFName() + " " + pd.getMName());
+
         p.setIdekb(pd.getIdEKB());
-        p.setInn(new BigInteger(pd.getINN()));
         
         return p;
     }

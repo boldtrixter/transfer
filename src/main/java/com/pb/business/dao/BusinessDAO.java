@@ -4,26 +4,30 @@
  */
 package com.pb.business.dao;
 
-import com.pb.business.entity.Person;
-import com.pb.business.entity.Token;
-import com.pb.business.entity.Transfertable;
+
 import com.pb.business.json.entity.TransferDetails;
 import com.pb.business.message.ServerResponse;
+import com.pb.transfer.Avtransf;
+import com.pb.transfer.Person;
+import com.pb.transfer.Status;
+import com.pb.transfer.Token;
+import com.pb.transfer.Transfer;
 import java.util.Date;
-import java.util.List;
+
 
 /**
  *
  * @author Dmitry
  */
 public interface BusinessDAO {
-    List<Transfertable> getAllMakers();
-    ServerResponse addTransfer(TransferDetails data);
+
+    ServerResponse addTransfer(Transfer transfer);
     void saveToken(String token, String time);
     Token getToken(String token);
-    void updateToken(Date datechange, String token);
-    void deleteToken(String token);
-    void hiberTest();
+    void updateToken(Token t);
+    void deleteToken(Token token);
+    String hiberTest();
     public Person getPersonByPhone(String phoneNumber);
     public boolean checkIp(String ip);
+    public Status getStatusByTitle(String title);
 }

@@ -15,6 +15,9 @@
     </properties>
 
     <dependencies>
+        
+        
+        
         <!--  HIBERNATE FRAMEWORK 3.6 -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -187,6 +190,14 @@
             <version>1.0</version>
         </dependency>
         <!-- DB2 DRIVER-->
+        
+        <!-- DERBY DRIVER-->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>10.9.1.0</version>
+        </dependency>
+        <!-- DERBY DRIVER-->
         
         <!--  DBCP CONNECTIONS POOL  -->
         <dependency>

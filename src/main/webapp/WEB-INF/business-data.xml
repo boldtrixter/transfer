@@ -16,9 +16,11 @@
     <context:component-scan base-package="com.pb.business.dao" />
     <context:component-scan base-package="com.pb.business.json.entity" />
     <context:component-scan base-package="com.pb.business.message" />
-    <context:component-scan base-package="com.pb.business.entity" />
+    <!--<context:component-scan base-package="com.pb.business.entity" />-->
+    <context:component-scan base-package="com.pb.transfer" />
     <!--  PACKAGES WHICH WILL SCANNIG ON ANNOTATIONS  -->
     
+
     <!--  DATA SOURCE  -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
@@ -34,7 +36,9 @@
             <value>${jdbc.password}</value>
         </property>
     </bean>
-    <!--  DATA SOURCE  -->
+     <!-- DATA SOURCE  -->   
+      
+       
     
     <!-- SESSION FACTORY-->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">

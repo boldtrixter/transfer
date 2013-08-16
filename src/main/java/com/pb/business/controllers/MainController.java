@@ -4,7 +4,6 @@
  */
 package com.pb.business.controllers;
 
-import com.pb.business.entity.Transfertable;
 import com.pb.business.message.ServerException;
 import com.pb.business.message.AuthorizationResponse;
 import com.pb.business.json.entity.TransferDetails;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 /**
  *
  * @author Dmitry
@@ -37,12 +35,16 @@ public class MainController {
     public MainController() {
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/hiber", method = RequestMethod.GET)
+    public String hiberTest(){
+        return business.hiberTest();
+    }
+
     @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ResponseBody
     public void saveImage() throws Exception {
-        
         //business.
-        
 //         BufferedReader reader  = new BufferedReader(new FileReader(new File("/home/user/img.txt")));
 //        
 //         StringBuilder builder = new StringBuilder();
@@ -61,27 +63,16 @@ public class MainController {
 //        } catch (IOException ex) {
 //           // Logger.getLogger(null, null, ex);
 //        }
-
     }
     
-    @RequestMapping(value = "/do-hibe", method = RequestMethod.GET)
-    @ResponseBody
-    public String doHiber(HttpServletRequest request) throws Exception {
-        
-//        String ip = request.getRemoteAddr();
-//        String prefix = " access permitted!";
-//        String msg = "You trying connect to PrivatTransfer from IP: " + ip + prefix;
-//        return msg;
-        
-        return business.hiberTest();
-    }
+    
 
-    @RequestMapping(value = "/goods/{userToken}", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public List<Transfertable> getAllMakers(@PathVariable String userToken) throws ServerException {
-        //logger.debug("Log smth");
-        return business.getAllMakers(userToken);
-    }
+//    @RequestMapping(value = "/goods/{userToken}", method = RequestMethod.GET, produces = "application/json")
+//    @ResponseBody
+//    public List<Transfertable1> getAllMakers(@PathVariable String userToken) throws ServerException {
+//        //logger.debug("Log smth");
+//        return business.getAllMakers(userToken);
+//    }
 
     @RequestMapping(value = "/addTransfer", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
@@ -116,5 +107,4 @@ public class MainController {
         sr.setNote(ex.getMessage());
         return sr;
     }
-
 }

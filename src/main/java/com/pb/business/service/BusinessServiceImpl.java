@@ -4,9 +4,7 @@
  */
 package com.pb.business.service;
 
-import com.pb.business.entity.Person;
-import com.pb.business.entity.Token;
-import com.pb.business.entity.Transfertable;
+
 import com.pb.business.message.Response;
 import com.pb.business.message.ServerException;
 import com.pb.business.message.AuthorizationResponse;
@@ -16,6 +14,13 @@ import com.pb.business.json.entity.UserData;
 import com.pb.business.dao.BusinessDAO;
 import com.pb.business.tools.Constant;
 import com.pb.business.tools.EKBRequest;
+import com.pb.transfer.Avtransf;
+import com.pb.transfer.Coordinates;
+import com.pb.transfer.Person;
+import com.pb.transfer.Product;
+import com.pb.transfer.Status;
+import com.pb.transfer.Token;
+import com.pb.transfer.Transfer;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -24,7 +29,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Level;
@@ -44,33 +51,34 @@ public class BusinessServiceImpl implements BusinessService {
     @Autowired
     EKBRequest ekb;
 
-    @Override
-    public List<Transfertable> getAllMakers(String userToken) throws ServerException {
+//    @Override
+//    public List<Transfertable1> getAllMakers(String userToken) throws ServerException {
 //        if (checkToken(userToken) != 0) {
 //            throw new ServerException("Иди авторизируйся!", "-112");
 //        }
-        checkToken(userToken);
-        return dao.getAllMakers();
-    }
+//        checkToken(userToken);
+//        return dao.getAllMakers();
+//    }
 
     @Override
     public String hiberTest() {
-        dao.hiberTest();
-        return "ok";
+        
+        return dao.hiberTest();
     }
 
     @Override
     @SuppressWarnings("UnusedAssignment")
     public ServerResponse addTransfer(TransferDetails transferDetails, String ip) throws Exception {
 
-//        проверка на существование и время жизни токена
-//        if (!checkToken(transferDetails.getToken())) {
-//            throw new ServerException("Token is dead, you need autorization", "-1");
-//        }
 
-        if (!checkIp(ip)) {
-            throw new ServerException(Response.AccessDenied.MESSAGE + " c IP: " + ip, Response.AccessDenied.CODE);
-        }
+//        if (!checkIp(ip)) {
+//            throw new ServerException(Response.AccessDenied.MESSAGE + " c IP: " + ip, Response.AccessDenied.CODE);
+//        }
+//        
+//        //        проверка на существование и время жизни токена
+//        if (!checkToken(transferDetails.getToken())) {
+//            throw new ServerException("Token1 is dead, you need autorization", "-1");
+//        }
         
 
         if ((!checkPhone(transferDetails.getSenderPhone())) || transferDetails.getSenderPhone().equals("")) {
@@ -85,9 +93,9 @@ public class BusinessServiceImpl implements BusinessService {
             throw new ServerException(Response.IncorrectCarrierPhone.MESSAGE, Response.IncorrectCarrierPhone.CODE);
         }
 
-        if (!checkDateTime(transferDetails.getDateTime()) || transferDetails.getDateTime().equals("")) {
-            throw new ServerException(Response.IncorrectDate.MESSAGE, Response.IncorrectDate.CODE);
-        }
+//        if (!checkDateTime(transferDetails.getDateTime()) || transferDetails.getDateTime().equals("")) {
+//            throw new ServerException(Response.IncorrectDate.MESSAGE, Response.IncorrectDate.CODE);
+//        }
 
         if (transferDetails.getName().equals("")) {
             throw new ServerException(Response.IncorrectProductName.MESSAGE, Response.IncorrectProductName.CODE);
@@ -117,12 +125,53 @@ public class BusinessServiceImpl implements BusinessService {
             recipient = ekb.getPersonDetailsByPhone(transferDetails.getRecipientPhone());
         }
 
-        Person carrier = dao.getPersonByPhone(transferDetails.getCarrierPhone());
+        //Person carrier = dao.getPersonByPhone(transferDetails.getCarrierPhone());
 
-        if (carrier == null) {
-            carrier = ekb.getPersonDetailsByPhone(transferDetails.getCarrierPhone());
-        }
+//        if (carrier == null) {
+//            carrier = ekb.getPersonDetailsByPhone(transferDetails.getCarrierPhone());
+//        }
+        
+        Status s = dao.getStatusByTitle("NEW");
+                
+        Product p = new Product();
+        p.setTitle(transferDetails.getName());
+        p.setDescription(transferDetails.getDescription());
+        p.setPhoto(transferDetails.getPhoto());
+        
+         
+        
+        Coordinates coors = new Coordinates();
+        coors.setLatitude(transferDetails.getCoords().getLatitude());
+        coors.setLongtitude(transferDetails.getCoords().getLongitude());
+        coors.setVariation(200);
+        
+        
+        
+        Transfer transfer = new Transfer();
+        transfer.setSenderid(sender);
+        transfer.setRecipientid(recipient);
+        //transfer.setCarrierid(carrier);
+        transfer.setProductid(p);
+        transfer.setStatusid(s);
+        transfer.setCoordsid(coors);
+        transfer.setDatecreate(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").parse(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(Calendar.getInstance().getTime())));
+        //new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS").format(Calendar.getInstance().getTime())
+        transfer.setAcceptancetype(transferDetails.getAcceptanceType());
+        transfer.setCallbacklink(transferDetails.getCallbackLink());
 
+        dao.addTransfer(transfer);
+        
+//        String phones = "1#2#3#4#5";
+//        
+//        StringTokenizer tokenizer = new StringTokenizer(phones,"#",false);
+//       List<String> l = new LinkedList<String>();
+//        while(tokenizer.hasMoreElements()){
+//            l.add((String) tokenizer.nextElement());
+//        }
+//        
+//        for(int i=0; i<l.size(); i++){
+//            
+//        }
         //Заполняем трансфер, затем доступный трансфер
         //Ложим в бд
 
@@ -184,12 +233,12 @@ public class BusinessServiceImpl implements BusinessService {
 //            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        try {
-//            Person receiver = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
+//            Person1 receiver = ekb.getPersonDetailsByPhone(data.getReceiver().getPhoneNumber());
 //        } catch (Exception ex) {
 //            java.util.logging.Logger.getLogger(BusinessServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        
-//        Person sender = dao.getPersonByPhone(data.getSender().getPhoneNumber());
+//        Person1 sender = dao.getPersonByPhone(data.getSender().getPhoneNumber());
 //        
 ////        if(sender == null){
 ////            sender = 
@@ -278,8 +327,6 @@ public class BusinessServiceImpl implements BusinessService {
 
     private String generateToken(String phone) {
         String token = (new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime())) + "_" + phone.substring(1);
-        // генерация времени жизни и сохранение в бд
-        //String dateChange = Calendar.getInstance().getTime().toString();
         dao.saveToken(token, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS").format(Calendar.getInstance().getTime()));
         return token;
     }
@@ -301,23 +348,24 @@ public class BusinessServiceImpl implements BusinessService {
         //TokenEntity te = lte.get(0);
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()));
         Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(current.getTime()) + "CURRENT!!!");
-        Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + "TOKEN!!!");
+        Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatecreate()) + "TOKEN!!!");
         //System.out.println((new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()));
 
-        if (t.getDatechange().after(current.getTime())) {
-            t.setDatechange(Calendar.getInstance().getTime());
-            Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatechange()) + " TOKEN CHANGED!!!");
+        if (t.getDatecreate().after(current.getTime())) {
+            t.setDatecreate(Calendar.getInstance().getTime());
+            Logger.getLogger(BusinessServiceImpl.class.getName()).log(Level.INFO, (new SimpleDateFormat("dd.MM.yyyy HH-mm-ss")).format(t.getDatecreate()) + " TOKEN CHANGED!!!");
 
             //проапдейтить время жизни токена в базу
-            dao.updateToken(t.getDatechange(), token);
+            dao.updateToken(t);
 
             return true;
         }
         //УДАЛИТЬ ИЗ БД т.к. умер. В будущем планируеться добавить сервис удаляющий токены
-        dao.deleteToken(token);
+        dao.deleteToken(t);
+        //return true;
 
         throw new ServerException(Response.TokenLifetimeEnd.MESSAGE, Response.TokenLifetimeEnd.CODE);
-        //return -2;
+        //return true;
     }
 
     private boolean checkIp(String ip) {
@@ -479,4 +527,5 @@ public class BusinessServiceImpl implements BusinessService {
             }
         }
     }
+
 }

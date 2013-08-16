@@ -2,13 +2,43 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <mapping class="com.pb.business.entity.Person" />
+        <!--<mapping class="com.pb.business.entity.Person" />
         <mapping class="com.pb.business.entity.Product" />
         <mapping class="com.pb.business.entity.Productscanserialnumber" />
         <mapping class="com.pb.business.entity.Status" />
         <mapping class="com.pb.business.entity.Token" />
         <mapping class="com.pb.business.entity.Transfer" />
         <mapping class="com.pb.business.entity.Transfertable" />
-        <mapping class="com.pb.business.entity.Unit" />
+        <mapping class="com.pb.business.entity.Unit" />-->
+        
+         <!--<mapping class="com.pb.tEntity.AvTransf" />
+         <mapping class="com.pb.tEntity.Coordinates" />
+         <mapping class="com.pb.tEntity.Person" />
+         <mapping class="com.pb.tEntity.Product" />
+         <mapping class="com.pb.tEntity.Security" />
+         <mapping class="com.pb.tEntity.Status" />
+         <mapping class="com.pb.tEntity.Token" />
+         <mapping class="com.pb.tEntity.Transfer" />-->
+         
+         <!--<mapping class="com.pb.bussiness.tentity.Avtransfer" />
+         
+         <mapping class="com.pb.bussiness.tentity.Coordinates" />
+         <mapping class="com.pb.bussiness.tentity.Person" />
+         <mapping class="com.pb.bussiness.tentity.Product" />
+         <mapping class="com.pb.bussiness.tentity.Security" />
+         <mapping class="com.pb.bussiness.tentity.Status" />
+         <mapping class="com.pb.bussiness.tentity.Token" />
+         <mapping class="com.pb.bussiness.tentity.Transfer" />
+         <mapping class="com.pb.bussiness.tentity.Sec" />-->
+         
+         <mapping class="com.pb.transfer.Avtransf" />
+         <mapping class="com.pb.transfer.Coordinates" />
+         <mapping class="com.pb.transfer.Person" />
+         <mapping class="com.pb.transfer.Product" />
+         <mapping class="com.pb.transfer.Security" />
+         <mapping class="com.pb.transfer.Status" />
+         <mapping class="com.pb.transfer.Token" />
+         <mapping class="com.pb.transfer.Transfer" />
+         
     </session-factory>
 </hibernate-configuration>
