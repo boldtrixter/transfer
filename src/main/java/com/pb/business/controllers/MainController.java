@@ -31,7 +31,10 @@ public class MainController {
 
     @Autowired
     private BusinessService business;
-
+    
+    public void f(){
+        System.out.println("!!!!");   
+    }
     public MainController() {
     }
     
